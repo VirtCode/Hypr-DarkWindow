@@ -38,31 +38,6 @@ static void logShaderError(const GLuint& shader, bool program, bool silent = fal
         g_pConfigManager->addParseError(FULLERROR);
 }
 
-static GLuint compileShader(const GLuint& type, std::string src, bool dynamic, bool silent) {
-    auto shader = glCreateShader(type);
-
-    auto shaderSource = src.c_str();
-
-    glShaderSource(shader, 1, (const GLchar**)&shaderSource, nullptr);
-    glCompileShader(shader);
-
-    GLint ok;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &ok);
-
-    if (dynamic) {
-        if (ok == GL_FALSE) {
-            logShaderError(shader, false, silent);
-            return 0;
-        }
-    } else {
-        if (ok != GL_TRUE)
-            logShaderError(shader, false);
-        RASSERT(ok != GL_FALSE, "compileShader() failed! GL_COMPILE_STATUS not OK!");
-    }
-
-    return shader;
-}
-
 static GLuint createProgram(const std::string& vert, const std::string& frag, bool dynamic, bool silent) {
     auto vertCompiled = compileShader(GL_VERTEX_SHADER, vert, dynamic, silent);
     if (dynamic) {
@@ -104,6 +79,30 @@ static GLuint createProgram(const std::string& vert, const std::string& frag, bo
     return prog;
 }
 
+static GLuint compileShader(const GLuint& type, std::string src, bool dynamic, bool silent) {
+    auto shader = glCreateShader(type);
+
+    auto shaderSource = src.c_str();
+
+    glShaderSource(shader, 1, (const GLchar**)&shaderSource, nullptr);
+    glCompileShader(shader);
+
+    GLint ok;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &ok);
+
+    if (dynamic) {
+        if (ok == GL_FALSE) {
+            logShaderError(shader, false, silent);
+            return 0;
+        }
+    } else {
+        if (ok != GL_TRUE)
+            logShaderError(shader, false);
+        RASSERT(ok != GL_FALSE, "compileShader() failed! GL_COMPILE_STATUS not OK!");
+    }
+
+    return shader;
+}
 static std::string loadShader(const std::string& filename) {
     const auto home = Hyprutils::Path::getHome();
     if (home.has_value()) {
@@ -138,7 +137,7 @@ static std::string processShader(const std::string& filename, const std::map<std
 }
 
 // shader has #include "CM.glsl"
-static void getCMShaderUniforms(CShader& shader) {
+static void getCMShaderUniforms(SShader& shader) {
     shader.skipCM          = glGetUniformLocation(shader.program, "skipCM");
     shader.sourceTF        = glGetUniformLocation(shader.program, "sourceTF");
     shader.targetTF        = glGetUniformLocation(shader.program, "targetTF");
@@ -154,7 +153,7 @@ static void getCMShaderUniforms(CShader& shader) {
 }
 
 // shader has #include "rounding.glsl"
-static void getRoundingShaderUniforms(CShader& shader) {
+static void getRoundingShaderUniforms(SShader& shader) {
     shader.topLeft       = glGetUniformLocation(shader.program, "topLeft");
     shader.fullSize      = glGetUniformLocation(shader.program, "fullSize");
     shader.radius        = glGetUniformLocation(shader.program, "radius");
