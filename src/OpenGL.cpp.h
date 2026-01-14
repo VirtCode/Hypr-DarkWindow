@@ -1,6 +1,7 @@
 // This file contains functions that were yoinked from hyprland/src/render/OpenGL.cpp
 #pragma once
 
+#include <hyprland/src/config/ConfigManager.hpp>
 #include <hyprland/src/render/OpenGL.hpp>
 #include <hyprland/src/render/shaders/Shaders.hpp>
 #include <hyprland/src/helpers/fs/FsUtils.hpp>
@@ -135,28 +136,4 @@ static std::string processShader(const std::string& filename, const std::map<std
     auto source = loadShader(filename);
     processShaderIncludes(source, includes);
     return source;
-}
-
-// shader has #include "CM.glsl"
-static void getCMShaderUniforms(SShader& shader) {
-    shader.uniformLocations[SHADER_SKIP_CM]           = glGetUniformLocation(shader.program, "skipCM");
-    shader.uniformLocations[SHADER_SOURCE_TF]         = glGetUniformLocation(shader.program, "sourceTF");
-    shader.uniformLocations[SHADER_TARGET_TF]         = glGetUniformLocation(shader.program, "targetTF");
-    shader.uniformLocations[SHADER_SRC_TF_RANGE]      = glGetUniformLocation(shader.program, "srcTFRange");
-    shader.uniformLocations[SHADER_DST_TF_RANGE]      = glGetUniformLocation(shader.program, "dstTFRange");
-    shader.uniformLocations[SHADER_TARGET_PRIMARIES]  = glGetUniformLocation(shader.program, "targetPrimaries");
-    shader.uniformLocations[SHADER_MAX_LUMINANCE]     = glGetUniformLocation(shader.program, "maxLuminance");
-    shader.uniformLocations[SHADER_DST_MAX_LUMINANCE] = glGetUniformLocation(shader.program, "dstMaxLuminance");
-    shader.uniformLocations[SHADER_DST_REF_LUMINANCE] = glGetUniformLocation(shader.program, "dstRefLuminance");
-    shader.uniformLocations[SHADER_SDR_SATURATION]    = glGetUniformLocation(shader.program, "sdrSaturation");
-    shader.uniformLocations[SHADER_SDR_BRIGHTNESS]    = glGetUniformLocation(shader.program, "sdrBrightnessMultiplier");
-    shader.uniformLocations[SHADER_CONVERT_MATRIX]    = glGetUniformLocation(shader.program, "convertMatrix");
-}
-
-// shader has #include "rounding.glsl"
-static void getRoundingShaderUniforms(SShader& shader) {
-    shader.uniformLocations[SHADER_TOP_LEFT]       = glGetUniformLocation(shader.program, "topLeft");
-    shader.uniformLocations[SHADER_FULL_SIZE]      = glGetUniformLocation(shader.program, "fullSize");
-    shader.uniformLocations[SHADER_RADIUS]         = glGetUniformLocation(shader.program, "radius");
-    shader.uniformLocations[SHADER_ROUNDING_POWER] = glGetUniformLocation(shader.program, "roundingPower");
 }

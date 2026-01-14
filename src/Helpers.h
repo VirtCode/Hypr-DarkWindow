@@ -37,13 +37,13 @@ inline auto findFunction(HANDLE handle, const std::string& className, const std:
 
 namespace std
 {
-    inline void swap(SShader& a, SShader& b)
+    inline void swap(CShader& a, CShader& b)
     {
         // memcpy because speed!
-        uint8_t c[sizeof(SShader)];
-        std::memcpy(&c, &a, sizeof(SShader));
-        std::memcpy(&a, &b, sizeof(SShader));
-        std::memcpy(&b, &c, sizeof(SShader));
+        uint8_t c[sizeof(CShader)];
+        std::memcpy(&c, &a, sizeof(CShader));
+        std::memcpy(&a, &b, sizeof(CShader));
+        std::memcpy(&b, &c, sizeof(CShader));
     }
 }
 
@@ -65,10 +65,10 @@ struct ShaderHolder
 {
     std::map<std::string, std::array<GLint, 4>> UniformLocations;
 
-    SShader CM;
-    SShader RGBA;
-    SShader RGBX;
-    SShader EXT;
+    CShader CM;
+    CShader RGBA;
+    CShader RGBX;
+    CShader EXT;
 
     ShaderHolder(const std::string& source);
     ~ShaderHolder();

@@ -1,4 +1,5 @@
 #include "WindowShader.h"
+#include "src/render/OpenGL.hpp"
 
 #include <fstream>
 
@@ -87,10 +88,10 @@ std::optional<ShaderConfig*>& WindowShader::OnRenderWindowPre(PHLWINDOW window)
     if (m_ShadersSwapped) {
         (*m_ShadersSwapped)->CompiledShaders->ApplyArgs((*m_ShadersSwapped)->Args);
 
-        std::swap((*m_ShadersSwapped)->CompiledShaders->EXT, g_pHyprOpenGL->m_shaders->m_shEXT);
-        std::swap((*m_ShadersSwapped)->CompiledShaders->RGBA, g_pHyprOpenGL->m_shaders->m_shRGBA);
-        std::swap((*m_ShadersSwapped)->CompiledShaders->RGBX, g_pHyprOpenGL->m_shaders->m_shRGBX);
-        std::swap((*m_ShadersSwapped)->CompiledShaders->CM, g_pHyprOpenGL->m_shaders->m_shCM);
+        std::swap((*m_ShadersSwapped)->CompiledShaders->EXT, *g_pHyprOpenGL->m_shaders->frag[SH_FRAG_EXT].get());
+        std::swap((*m_ShadersSwapped)->CompiledShaders->RGBA, *g_pHyprOpenGL->m_shaders->frag[SH_FRAG_RGBA].get());
+        std::swap((*m_ShadersSwapped)->CompiledShaders->RGBX, *g_pHyprOpenGL->m_shaders->frag[SH_FRAG_RGBX].get());
+        std::swap((*m_ShadersSwapped)->CompiledShaders->CM, *g_pHyprOpenGL->m_shaders->frag[SH_FRAG_CM_RGBA].get());
     }
 
     return m_ShadersSwapped;
@@ -100,10 +101,10 @@ void WindowShader::OnRenderWindowPost()
 {
     if (m_ShadersSwapped)
     {
-        std::swap((*m_ShadersSwapped)->CompiledShaders->EXT, g_pHyprOpenGL->m_shaders->m_shEXT);
-        std::swap((*m_ShadersSwapped)->CompiledShaders->RGBA, g_pHyprOpenGL->m_shaders->m_shRGBA);
-        std::swap((*m_ShadersSwapped)->CompiledShaders->RGBX, g_pHyprOpenGL->m_shaders->m_shRGBX);
-        std::swap((*m_ShadersSwapped)->CompiledShaders->CM, g_pHyprOpenGL->m_shaders->m_shCM);
+        std::swap((*m_ShadersSwapped)->CompiledShaders->EXT, *g_pHyprOpenGL->m_shaders->frag[SH_FRAG_EXT].get());
+        std::swap((*m_ShadersSwapped)->CompiledShaders->RGBA, *g_pHyprOpenGL->m_shaders->frag[SH_FRAG_RGBA].get());
+        std::swap((*m_ShadersSwapped)->CompiledShaders->RGBX, *g_pHyprOpenGL->m_shaders->frag[SH_FRAG_RGBX].get());
+        std::swap((*m_ShadersSwapped)->CompiledShaders->CM, *g_pHyprOpenGL->m_shaders->frag[SH_FRAG_CM_RGBA].get());
         m_ShadersSwapped.reset();
     }
 }
